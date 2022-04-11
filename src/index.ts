@@ -16,7 +16,12 @@ const hostname = process.env.HOSTNAME;
 const port = +process.env.PORT;
 
 const csrfProtection = csrf({
-  cookie: true,
+  cookie: {
+    domain: process.env.COOKIE_DOMAIN,
+    httpOnly: true,
+    sameSite: 'strict',
+    secure: process.env.NODE_ENV === 'production',
+  },
 });
 
 initMongoDb().then((db) => {

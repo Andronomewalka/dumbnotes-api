@@ -6,6 +6,7 @@ declare global {
       MONGODB_DB: string;
       HOSTNAME: string;
       PORT: string;
+      COOKIE_DOMAIN: string;
       ORIGIN_MAIN: string;
       ORIGIN_ADMIN: string;
       AUTH_ISSUER: string;

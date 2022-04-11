@@ -59,16 +59,18 @@ export const setTokensToCookies = (
   res: Response<any, Record<string, any>>
 ) => {
   res.cookie('X-DumbNotes-Access-Token', tokens.accessToken, {
+    domain: process.env.COOKIE_DOMAIN,
     maxAge: parseInt(process.env.AUTH_ACCESS_LIFETIME_S) * 1000,
     httpOnly: true,
-    secure: process.env.NODE_ENV === 'production',
     sameSite: 'strict',
+    secure: process.env.NODE_ENV === 'production',
   });
   res.cookie('X-DumbNotes-Refresh-Token', tokens.refreshToken, {
+    domain: process.env.COOKIE_DOMAIN,
     maxAge: parseInt(process.env.AUTH_REFRESH_LIFETIME_S) * 1000,
     httpOnly: true,
-    secure: process.env.NODE_ENV === 'production',
     sameSite: 'strict',
+    secure: process.env.NODE_ENV === 'production',
   });
 };
 
