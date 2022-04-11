@@ -46,6 +46,13 @@ initMongoDb().then((db) => {
 
   app.use(processJwtVerification);
 
+  app.get('/', (req: Request, res: Response, next: NextFunction) => {
+    return res.json({
+      message:
+        'After 9 years in development, hopefully it would have been worth the wait',
+    });
+  });
+
   app.use('/auth', authRouter);
   app.use('/posts', postsRouter);
   app.use('/navigation', navigationRouter);
