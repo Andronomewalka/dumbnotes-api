@@ -38,7 +38,7 @@ export const authController = {
 
         if (authenticator.check(code, secret)) {
           await updateSignInTry(clientIp, 0, db);
-          const tokens = generateTokenPair(clientIp);
+          const tokens = generateTokenPair();
           setTokensToCookies(tokens, res);
           return res.status(200).json({});
         } else {

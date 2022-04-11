@@ -1,53 +1,41 @@
 import { NextFunction, Request, Response } from 'express';
 import jwt from 'jsonwebtoken';
 import { Db } from 'mongodb';
-import requestIp from 'request-ip';
 import { NOT_FOUND } from '@utils/constants';
 import { createSignInTry } from './createSignInTry';
 import { getSignInTry } from './getSignInTry';
 import { TokenPairType } from './types';
-import { updateSignInTry } from './updateSignInTry';
 
-declare module 'jsonwebtoken' {
-  export interface JwtPayload {
-    cip: string;
-  }
-}
-
-const generatePayload = (clientIp: string) => {
+const generatePayload = () => {
   return {
     iss: process.env.AUTH_ISSUER,
     sub: process.env.AUTH_SUBJECT,
     aud: process.env.AUTH_AUDIENCE,
-    cip: clientIp,
   };
 };
 
-const generateAccessToken = (clientIp: string) => {
-  return jwt.sign(generatePayload(clientIp), process.env.AUTH_SECRET, {
+const generateAccessToken = () => {
+  return jwt.sign(generatePayload(), process.env.AUTH_SECRET, {
     expiresIn: `${process.env.AUTH_ACCESS_LIFETIME_S}s`,
   });
 };
 
-const generateRefreshToken = (clientIp: string) => {
-  return jwt.sign(generatePayload(clientIp), process.env.AUTH_SECRET, {
+const generateRefreshToken = () => {
+  return jwt.sign(generatePayload(), process.env.AUTH_SECRET, {
     expiresIn: `${process.env.AUTH_REFRESH_LIFETIME_S}s`,
   });
 };
 
-export const generateTokenPair = (clientIp: string): TokenPairType => {
+export const generateTokenPair = (): TokenPairType => {
   return {
-    accessToken: generateAccessToken(clientIp),
-    refreshToken: generateRefreshToken(clientIp),
+    accessToken: generateAccessToken(),
+    refreshToken: generateRefreshToken(),
   };
 };
 
-const verifyToken = (token: string, clientIp: string) => {
+const verifyToken = (token: string) => {
   try {
-    const decoded = jwt.verify(token, process.env.AUTH_SECRET);
-    if (typeof decoded === 'object' && decoded.cip === clientIp) {
-      return decoded;
-    }
+    return jwt.verify(token, process.env.AUTH_SECRET);
   } catch (e: any) {
     console.log('verifyToken error', e);
   }
@@ -105,35 +93,21 @@ export const processJwtVerification = async (
       return next(); // no jwt validation for get requests and sign-in
     }
 
-    const clientIp = requestIp.getClientIp(req);
-    const db = res.locals.db;
-
-    if (clientIp) {
-      const curTry = await checkTryCount(clientIp, db);
-      if (curTry > 2) {
-        return res.status(401).json({ message: 'Permabanned :)' });
-      } else if (curTry === -1) {
-        return res.status(500).json();
+    const accessToken = req.cookies['X-DumbNotes-Access-Token']?.split(' ')[0];
+    if (accessToken) {
+      const accessTokenVerified = verifyToken(accessToken);
+      if (accessTokenVerified) {
+        return next();
       }
-
-      const accessToken = req.cookies['X-DumbNotes-Access-Token']?.split(' ')[0];
-      if (accessToken) {
-        const accessTokenVerified = verifyToken(accessToken, clientIp);
-        if (accessTokenVerified) {
-          return next();
-        }
+    }
+    const refreshToken = req.cookies['X-DumbNotes-Refresh-Token']?.split(' ')[0];
+    if (refreshToken) {
+      const refreshTokenVerified = verifyToken(refreshToken);
+      if (refreshTokenVerified) {
+        const tokens = generateTokenPair();
+        setTokensToCookies(tokens, res);
+        return next();
       }
-      const refreshToken = req.cookies['X-DumbNotes-Refresh-Token']?.split(' ')[0];
-      if (refreshToken) {
-        const refreshTokenVerified = verifyToken(refreshToken, clientIp);
-        if (refreshTokenVerified) {
-          const tokens = generateTokenPair(clientIp);
-          setTokensToCookies(tokens, res);
-          await updateSignInTry(clientIp, 0, db);
-          return next();
-        }
-      }
-      await updateSignInTry(clientIp, curTry + 1, db);
     }
   } catch (e: any) {
     console.log('jwt validation error', e);
