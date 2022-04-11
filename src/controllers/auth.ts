@@ -7,8 +7,8 @@ import {
   generateTokenPair,
   setTokensToCookies,
   checkTryCount,
-} from 'services/auth';
-import { NOT_FOUND, WRONG_BODY } from 'utils/constants';
+} from '@services/auth';
+import { NOT_FOUND, WRONG_BODY } from '@utils/constants';
 
 export const authController = {
   signIn: async (req: Request, res: Response, next: NextFunction) => {

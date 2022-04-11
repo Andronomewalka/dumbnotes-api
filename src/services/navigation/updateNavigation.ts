@@ -1,5 +1,5 @@
 import { Db } from 'mongodb';
-import { NOT_FOUND } from 'utils/constants';
+import { NOT_FOUND } from '@utils/constants';
 import { Response } from '../types';
 import { NavNodeBaseType } from './types';
 

@@ -1,5 +1,5 @@
 import { Db } from 'mongodb';
-import { NOT_FOUND } from 'utils/constants';
+import { NOT_FOUND } from '@utils/constants';
 import { Response } from '../types';
 
 export const getSignInTry = async (ip: string, db: Db): Promise<Response<number>> => {

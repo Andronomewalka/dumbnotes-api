@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from 'express';
-import { getPosts, getPost, createPost, updatePost, deletePost } from 'services/posts';
-import { NOT_FOUND, WRONG_PARAMS, WRONG_BODY } from 'utils/constants';
+import { getPosts, getPost, createPost, updatePost, deletePost } from '@services/posts';
+import { NOT_FOUND, WRONG_PARAMS, WRONG_BODY } from '@utils/constants';
 
 export const postsController = {
   getAll: async (req: Request, res: Response, next: NextFunction) => {

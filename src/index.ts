@@ -1,19 +1,19 @@
-/// <reference path="./environment.d.ts" />
+/// <reference path="../environment.d.ts" />
 import 'dotenv/config';
-import express from 'express';
+import express, { NextFunction, Request, Response } from 'express';
 import helmet from 'helmet';
 import cors from 'cors';
 import cookieParser from 'cookie-parser';
 import csrf from 'csurf';
-import { authRouter } from 'routes/auth';
-import { navigationRouter } from 'routes/navigation';
-import { postsRouter } from 'routes/posts';
-import { initMongoDb } from 'services/mongodb';
-import { processJwtVerification } from 'services/auth';
+import { authRouter } from '@routes/auth';
+import { navigationRouter } from '@routes/navigation';
+import { postsRouter } from '@routes/posts';
+import { initMongoDb } from '@services/mongodb';
+import { processJwtVerification } from '@services/auth';
 
 const app = express();
-const hostname = '127.0.0.1';
-const port = 8080;
+const hostname = process.env.HOSTNAME;
+const port = +process.env.PORT;
 
 const csrfProtection = csrf({
   cookie: true,
@@ -39,7 +39,7 @@ initMongoDb().then((db) => {
   app.use(cookieParser());
   app.use(csrfProtection);
 
-  app.use((req, res, next) => {
+  app.use((req: Request, res: Response, next: NextFunction) => {
     res.locals.db = db;
     next();
   });

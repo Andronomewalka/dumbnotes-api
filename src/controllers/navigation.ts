@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from 'express';
-import { getNavigation, updateNavigation, NavNodeBaseType } from 'services/navigation';
-import { NOT_FOUND, WRONG_BODY } from 'utils/constants';
+import { getNavigation, updateNavigation, NavNodeBaseType } from '@services/navigation';
+import { NOT_FOUND, WRONG_BODY } from '@utils/constants';
 
 export const navigationController = {
   getAll: async (req: Request, res: Response, next: NextFunction) => {

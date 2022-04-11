@@ -2,7 +2,7 @@ import { NextFunction, Request, Response } from 'express';
 import jwt from 'jsonwebtoken';
 import { Db } from 'mongodb';
 import requestIp from 'request-ip';
-import { NOT_FOUND } from 'utils/constants';
+import { NOT_FOUND } from '@utils/constants';
 import { createSignInTry } from './createSignInTry';
 import { getSignInTry } from './getSignInTry';
 import { TokenPairType } from './types';
@@ -61,11 +61,13 @@ export const setTokensToCookies = (
   res.cookie('X-DumbNotes-Access-Token', tokens.accessToken, {
     maxAge: parseInt(process.env.AUTH_ACCESS_LIFETIME_S) * 1000,
     httpOnly: true,
+    secure: process.env.NODE_ENV === 'production',
     sameSite: 'strict',
   });
   res.cookie('X-DumbNotes-Refresh-Token', tokens.refreshToken, {
     maxAge: parseInt(process.env.AUTH_REFRESH_LIFETIME_S) * 1000,
     httpOnly: true,
+    secure: process.env.NODE_ENV === 'production',
     sameSite: 'strict',
   });
 };

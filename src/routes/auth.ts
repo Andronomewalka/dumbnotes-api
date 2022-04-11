@@ -1,5 +1,5 @@
 import express from 'express';
-import { authController } from 'controllers/auth';
+import { authController } from '@controllers/auth';
 
 export const authRouter = express.Router();
 authRouter.post('/sign-in', authController.signIn);

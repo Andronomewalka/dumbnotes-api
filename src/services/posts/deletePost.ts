@@ -1,5 +1,5 @@
 import { Db, ObjectId } from 'mongodb';
-import { NOT_FOUND } from 'utils/constants';
+import { NOT_FOUND } from '@utils/constants';
 import { Response } from '../types';
 
 export const deletePost = async (id: string, db: Db): Promise<Response<boolean>> => {

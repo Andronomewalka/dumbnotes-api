@@ -4,6 +4,8 @@ declare global {
       NODE_ENV: 'development' | 'production';
       MONGODB_URI: string;
       MONGODB_DB: string;
+      HOSTNAME: string;
+      PORT: string;
       ORIGIN_MAIN: string;
       ORIGIN_ADMIN: string;
       AUTH_ISSUER: string;

@@ -1,5 +1,5 @@
 import express from 'express';
-import { postsController } from 'controllers/posts';
+import { postsController } from '@controllers/posts';
 
 export const postsRouter = express.Router();
 postsRouter.get('/:slug', postsController.get);
