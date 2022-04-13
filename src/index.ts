@@ -25,6 +25,8 @@ const csrfProtection = csrf({
 });
 
 initMongoDb().then((db) => {
+  app.use('/favicon.ico', express.static('favicon.ico'));
+
   app.use(helmet());
   app.use(helmet.xssFilter());
   app.use(helmet.hsts());
