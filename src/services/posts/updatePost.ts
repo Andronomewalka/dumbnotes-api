@@ -2,6 +2,7 @@ import { Db, ObjectId } from 'mongodb';
 import { NOT_FOUND } from '@utils/constants';
 import { Response } from '../types';
 import { PostType } from './types';
+import { reservedPathes } from './utils';
 
 export const updatePost = async (post: PostType, db: Db): Promise<Response<boolean>> => {
   const postsCollection = await db.collection('Posts');
@@ -9,7 +10,7 @@ export const updatePost = async (post: PostType, db: Db): Promise<Response<boole
   let error = '';
   let pathAlreadyExist = false;
 
-  if (post.path === 'new' || post.path === 'navigation') {
+  if (reservedPathes.includes(post.path.toLowerCase())) {
     return {
       data: false,
       error: 'Reserved path',

@@ -6,3 +6,5 @@ export const defaultPost: PostType = {
   path: '',
   content: '',
 };
+
+export const reservedPathes = ['new', 'navigation', '404', '500'];

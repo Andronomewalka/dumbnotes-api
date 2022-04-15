@@ -2,6 +2,7 @@ import { Db } from 'mongodb';
 import { NOT_FOUND } from '@utils/constants';
 import { Response } from '../types';
 import { PostType } from './types';
+import { reservedPathes } from './utils';
 
 export const createPost = async (
   post: Omit<PostType, 'id'>,
@@ -12,7 +13,7 @@ export const createPost = async (
   let error = '';
   let pathAlreadyExist = false;
 
-  if (post.path === 'new' || post.path === 'navigation') {
+  if (reservedPathes.includes(post.path.toLowerCase())) {
     return {
       data: '',
       error: 'Reserved path',
