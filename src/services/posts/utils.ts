@@ -12,7 +12,7 @@ export const reservedPathes = ['new', 'navigation', '404', '500'];
 export const deserializeGetPostsParams = (query: any): GetPostsParams => {
   let filter = '.*';
   if (typeof query.filter === 'string') {
-    filter = query.filter;
+    filter = query.filter.trim();
   }
 
   let cursorId = '';
