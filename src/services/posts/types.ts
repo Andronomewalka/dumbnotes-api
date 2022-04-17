@@ -7,3 +7,10 @@ export interface PostBaseType {
 export interface PostType extends PostBaseType {
   content: string;
 }
+
+export interface GetPostsParams {
+  filter: string;
+  cursorId: string;
+  limit: number;
+  exclude: string[];
+}

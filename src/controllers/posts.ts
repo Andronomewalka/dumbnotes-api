@@ -1,16 +1,20 @@
 import { NextFunction, Request, Response } from 'express';
-import { getPosts, getPost, createPost, updatePost, deletePost } from '@services/posts';
+import {
+  getPosts,
+  getPost,
+  createPost,
+  updatePost,
+  deletePost,
+  deserializeGetPostsParams,
+} from '@services/posts';
 import { NOT_FOUND, WRONG_PARAMS, WRONG_BODY } from '@utils/constants';
 
 export const postsController = {
   getAll: async (req: Request, res: Response, next: NextFunction) => {
     try {
-      let exclude: string[] = [];
-      if (typeof req.query.exclude === 'string') {
-        exclude = JSON.parse(req.query.exclude);
-      }
+      const params = deserializeGetPostsParams(req.query);
       const db = res.locals.db;
-      const response = await getPosts(exclude, db);
+      const response = await getPosts(params, db);
       if (response.error === NOT_FOUND) {
         return res.status(404).json({ message: NOT_FOUND });
       }
