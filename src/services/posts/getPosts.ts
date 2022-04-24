@@ -28,7 +28,12 @@ export const getPosts = async (
           _id: { $gt: new ObjectId(params.cursorId || 0) },
           $or: [
             { name: { $regex: new RegExp(`${params.filter}`), $options: 'i' } },
-            { content: { $regex: new RegExp(`${params.filter}`), $options: 'i' } },
+            {
+              content: {
+                $regex: new RegExp(`(?<=>)[^\\>]*${params.filter}[^\\>]*(?=<\\/|<)`),
+                $options: 'i',
+              },
+            },
           ],
         },
         { limit: params.limit, projection }
