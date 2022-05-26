@@ -69,7 +69,7 @@ export const checkTryCount = async (clientIp: string, db: Db) => {
     return -1;
   } else if (ipTries.error === NOT_FOUND) {
     const addIpTryResult = await createSignInTry(clientIp, db);
-    if (!addIpTryResult) {
+    if (addIpTryResult.error) {
       return -1;
     }
     curTry = 0;
