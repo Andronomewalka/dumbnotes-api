@@ -1,13 +1,25 @@
-import { GetPostsParams, PostType } from './types';
+import { GetPostParams, GetPostsParams, PostType } from './types';
 
 export const defaultPost: PostType = {
   id: '',
   name: '',
   path: '',
   content: '',
+  date: '',
 };
 
 export const reservedPathes = ['new', 'navigation', '404', '500'];
+
+export const deserializeGetPostParams = (query: any): GetPostParams => {
+  let exclude: string[] = [];
+  if (typeof query.exclude === 'string') {
+    try {
+      exclude = JSON.parse(query.exclude);
+      // eslint-disable-next-line no-empty
+    } catch {}
+  }
+  return { exclude };
+};
 
 export const deserializeGetPostsParams = (query: any): GetPostsParams => {
   let filter = '.*';
@@ -28,13 +40,7 @@ export const deserializeGetPostsParams = (query: any): GetPostsParams => {
     }
   }
 
-  let exclude: string[] = [];
-  if (typeof query.exclude === 'string') {
-    try {
-      exclude = JSON.parse(query.exclude);
-      // eslint-disable-next-line no-empty
-    } catch {}
-  }
+  const { exclude } = deserializeGetPostParams(query);
 
   return {
     filter,

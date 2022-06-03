@@ -5,7 +5,7 @@ import { PostType } from './types';
 import { reservedPathes } from './utils';
 
 export const createPost = async (
-  post: Omit<PostType, 'id'>,
+  post: Omit<PostType, 'id' | 'date'>,
   db: Db
 ): Promise<Response<string>> => {
   const postsCollection = await db.collection('Posts');
@@ -46,7 +46,7 @@ export const createPost = async (
   }
 
   await new Promise((resolve, reject) => {
-    postsCollection.insertOne(post, (err, result) => {
+    postsCollection.insertOne({ ...post, date: new Date().getTime() }, (err, result) => {
       if (err || !result) {
         reject(error);
         return;

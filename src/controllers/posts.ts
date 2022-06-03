@@ -6,6 +6,7 @@ import {
   updatePost,
   deletePost,
   deserializeGetPostsParams,
+  deserializeGetPostParams,
 } from '@services/posts';
 import { NOT_FOUND, WRONG_PARAMS, WRONG_BODY } from '@utils/constants';
 
@@ -30,8 +31,9 @@ export const postsController = {
       if (!slug) {
         return res.status(400).json({ message: WRONG_PARAMS });
       }
+      const params = deserializeGetPostParams(req.query);
       const db = res.locals.db;
-      const response = await getPost(slug, db);
+      const response = await getPost(slug, db, params);
       if (response.error === NOT_FOUND) {
         return res.status(404).json({ message: NOT_FOUND });
       }

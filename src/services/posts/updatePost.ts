@@ -4,7 +4,10 @@ import { Response } from '../types';
 import { PostType } from './types';
 import { reservedPathes } from './utils';
 
-export const updatePost = async (post: PostType, db: Db): Promise<Response<boolean>> => {
+export const updatePost = async (
+  post: Omit<PostType, 'date'>,
+  db: Db
+): Promise<Response<boolean>> => {
   const postsCollection = await db.collection('Posts');
   let data = false;
   let error = '';
@@ -49,7 +52,7 @@ export const updatePost = async (post: PostType, db: Db): Promise<Response<boole
   await new Promise((resolve, reject) => {
     postsCollection.updateOne(
       { _id: new ObjectId(id) },
-      { $set: postDb },
+      { $set: { ...postDb, date: new Date().getTime() } },
       (err, result) => {
         if (err || !result) {
           reject(err);

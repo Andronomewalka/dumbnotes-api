@@ -1,16 +1,25 @@
 import { Db } from 'mongodb';
 import { NOT_FOUND } from '@utils/constants';
 import { Response } from '../types';
-import { PostType } from './types';
+import { GetPostParams, PostType } from './types';
 import { defaultPost } from './utils';
 
-export const getPost = async (path: string, db: Db): Promise<Response<PostType>> => {
+export const getPost = async (
+  path: string,
+  db: Db,
+  params: GetPostParams
+): Promise<Response<PostType>> => {
   const postsCollection = await db.collection('Posts');
   let data: PostType = defaultPost;
   let error = '';
 
+  const projection = params.exclude.reduce(
+    (acc, cur) => (((acc as any)[cur] = 0), acc),
+    {}
+  );
+
   await new Promise((resolve, reject) => {
-    postsCollection.findOne({ path }, (err, result) => {
+    postsCollection.findOne({ path }, { projection }, (err, result) => {
       if (err || !result) {
         reject(error);
         return;
