@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "engines": {
     "node": "16.14.0",
-    "yarn": "1.22.15"
+    "yarn": "1.22.19"
   },
   "main": "src/index.ts",
   "license": "MIT",
