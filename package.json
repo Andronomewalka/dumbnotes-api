@@ -8,9 +8,10 @@
   "main": "src/index.ts",
   "license": "MIT",
   "scripts": {
-    "dev": "ts-node-dev -r tsconfig-paths/register .",
+    "dev": "set MONGODB_DB=Dev_Blog&& ts-node-dev -r tsconfig-paths/register .",
     "start": "ts-node -r tsconfig-paths/register .",
-    "postinstall": "tsc --project tsconfig.json && tscpaths -p tsconfig.json -s ./src -o ./dist"
+    "postinstall": "tsc --project tsconfig.json && tscpaths -p tsconfig.json -s ./src -o ./dist",
+    "start-dev-db": "set MONGODB_DB=Dev_Blog&& ts-node -r tsconfig-paths/register ."
   },
   "dependencies": {
     "cookie-parser": "^1.4.6",

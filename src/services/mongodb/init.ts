@@ -17,5 +17,5 @@ export const initMongoDb = async () => {
     }
   };
   process.on('exit', onAppExit);
-  return await mongoClient.db('Blog');
+  return await mongoClient.db(process.env.MONGODB_DB);
 };
