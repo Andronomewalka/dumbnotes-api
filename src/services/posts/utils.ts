@@ -8,7 +8,7 @@ export const defaultPost: PostType = {
   date: '',
 };
 
-export const reservedPathes = ['new', 'navigation', 'settings', '404', '500'];
+export const reservedPathes = ['new', 'navigation', '404', '500'];
 
 export const deserializeGetPostParams = (query: any): GetPostParams => {
   let exclude: string[] = [];
